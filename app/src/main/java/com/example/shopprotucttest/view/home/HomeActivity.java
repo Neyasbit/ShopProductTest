@@ -1,6 +1,7 @@
 package com.example.shopprotucttest.view.home;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,9 +26,11 @@ import com.example.shopprotucttest.model.ShopData;
 import com.example.shopprotucttest.view.detail.DetailActivity;
 import com.google.android.material.navigation.NavigationView;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,10 +52,12 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     private List<ExpandedMenuModel> listDataHeader = new ArrayList<>();
 
     private HomePresenter presenter;
+    private ShopData dataItem;
     private RecyclerViewHomeAdapter homeAdapter;
     private List<ShopData.Item> items = new ArrayList<>();
     private static int page = 1;
     public static boolean isLoading;
+
     public static void setIsLoading(boolean isLoading) {
         HomeActivity.isLoading = isLoading;
     }
@@ -135,7 +140,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
             @Override
             public void loadMore() {
                 if (isLoading) {
-                    if (page < 3) {
+                    if (page < dataItem.getMeta().getLastPage()) {
                         page += 1;
                         presenter.getData(page);
                         isLoading = false;
@@ -157,8 +162,10 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                items.clear();
-                presenter.getData(1);
+                Uri uri = Uri.parse(dataItem.getMeta().getPath());
+                Set<String> args = uri.getQueryParameterNames();
+                String path = uri.getQueryParameter("shop-item");
+                presenter.getRefresh(path);
                 homeAdapter.setItemList(items);
                 refreshLayout.setRefreshing(false);
             }
@@ -178,10 +185,17 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     }
 
     @Override
+    public void setData(ShopData data) {
+        dataItem = new ShopData();
+        dataItem = data;
+    }
+
+    @Override
     public void setDataList(List<ShopData.Item> itemList) {
         items.addAll(itemList);
         homeAdapter.setItemList(items);
     }
+
     @Override
     public void setListDataMenu(List<ExpandedMenuModel> plistDataHeader, HashMap<ExpandedMenuModel, List<String>> plistDataChild) {
         listDataHeader.addAll(plistDataHeader);

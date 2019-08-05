@@ -25,6 +25,7 @@ public class HomePresenter {
                 HomeActivity.setIsLoading(true);
                 if (response.isSuccessful() && response.body() != null) {
                     view.setDataList(response.body().getData());
+                    view.setData(response.body());
                 }
                 else {
                     view.onErrorLoading(response.message());
@@ -73,6 +74,25 @@ public class HomePresenter {
             @Override
             public void onFailure(Call<ShopData> call, Throwable t) {
                 view.onErrorLoading(t.getLocalizedMessage());
+            }
+        });
+    }
+    void getRefresh(String refresh) {
+        Call<ShopData> shopDataCall = Utils.getApi().getRefreshDataList(refresh);
+        shopDataCall.enqueue(new Callback<ShopData>() {
+            @Override
+            public void onResponse(Call<ShopData> call, Response<ShopData> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    view.setDataList(response.body().getData());
+                }
+                else {
+                    view.onErrorLoading(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ShopData> call, Throwable t) {
+                    view.onErrorLoading(t.getLocalizedMessage());
             }
         });
     }

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface HomeView {
+    void setData(ShopData data);
     void setDataList(List<ShopData.Item> itemList);
     void onErrorLoading(String message);
     void setListDataMenu(List<ExpandedMenuModel> listDataHeader, HashMap<ExpandedMenuModel, List<String>> listDataChild);
