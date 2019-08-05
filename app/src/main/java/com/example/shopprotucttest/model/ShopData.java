@@ -14,6 +14,13 @@ public class ShopData implements Serializable {
         return data;
     }
 
+    @Json(name = "meta")
+    private Meta meta;
+
+    public Meta getMeta() {
+        return meta;
+    }
+
     public static class Item implements Serializable{
 
         @Json(name = "id")
@@ -83,6 +90,36 @@ public class ShopData implements Serializable {
             public String getName() {
                 return name;
             }
+        }
+    }
+
+    public static class Meta implements Serializable{
+
+        @Json(name = "current_page")
+        private Integer currentPage;
+        @Json(name = "from")
+        public Integer from;
+        @Json(name = "last_page")
+        private Integer lastPage;
+        @Json(name = "path")
+        private String path;
+        @Json(name = "per_page")
+        public Integer perPage;
+        @Json(name = "to")
+        public Integer to;
+        @Json(name = "total")
+        public Integer total;
+
+        public String getPath() {
+            return path;
+        }
+
+        public Integer getLastPage() {
+            return lastPage;
+        }
+
+        public Integer getCurrentPage() {
+            return currentPage;
         }
     }
 }
