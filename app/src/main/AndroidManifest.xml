@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.detail.DetailActivity"></activity>
+        <activity android:name=".view.detail.DetailActivity"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".view.home.HomeActivity"
             android:screenOrientation="portrait">
